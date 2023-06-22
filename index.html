@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>亂數產生器</title>
+  <style>
+    /* 基本的 CSS 樣式 */
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    .container {
+      margin-top: 50px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .numbers {
+      margin-bottom: 20px;
+    }
+
+    #excludedNumbers {
+      width: 100%;
+      height: 100px;
+    }
+
+    #generateButton {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>亂數產生器</h2>
+    <div class="numbers">
+      <h3>第一組數字:</h3>
+      <p id="firstNumbers"></p>
+    </div>
+    <div class="numbers">
+      <h3>第二組數字:</h3>
+      <p id="secondNumbers"></p>
+    </div>
+    <div>
+      <label for="excludedNumbers">排除的數字（以空格區隔）:</label>
+      <textarea id="excludedNumbers"></textarea>
+    </div>
+    <button id="generateButton" onclick="generateRandomNumbers()">產生</button>
+  </div>
+  
+  <script>
+    function generateRandomNumbers() {
+      var excludedNumbersString = document.getElementById('excludedNumbers').value;
+      var excludedNumbers = excludedNumbersString.split(/\s+/);
+      var firstNumbers = generateUniqueRandomNumbers(1, 39, 5, excludedNumbers).sort(function(a, b) {
+        return a - b;
+      });
+      var secondNumbers = generateUniqueRandomNumbers(1, 39, 5, excludedNumbers).sort(function(a, b) {
+        return a - b;
+      });
+      
+      document.getElementById('firstNumbers').innerHTML = firstNumbers.join(', ');
+      document.getElementById('secondNumbers').innerHTML = secondNumbers.join(', ');
+    }
+    
+    function generateUniqueRandomNumbers(min, max, count, excluded) {
+      var numbers = [];
+      
+      while (numbers.length < count) {
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        var paddedNumber = randomNumber.toString().padStart(2, '0');
+        
+        if (!numbers.includes(paddedNumber) && !excluded.includes(paddedNumber) && !excluded.includes(randomNumber.toString())) {
+          numbers.push(paddedNumber);
+        }
+      }
+      
+      return numbers;
+    }
+  </script>
+</body>
+</html>
